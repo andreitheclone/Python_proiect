@@ -1,7 +1,7 @@
 from tkinter import * 
 from tkinter.ttk import *
 from tkinter import messagebox
-
+#suntem forte
 master = Tk()
 master.title("Window Title")
 master.geometry("500x300")
