@@ -1,16 +1,101 @@
 from tkinter import * 
 from tkinter.ttk import *
 from tkinter import messagebox
-#suntem forte
+
+#
+from PIL import Image, ImageTk
+import random
+#
+
+#
+
+
+
+class SlotMachineGame:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Slot Machine Game")
+
+        self.symbols = ["Cherry", "Lemon", "Orange", "Plum", "Bell", "Bar", "Seven"]
+
+        self.reels = [[StringVar(), StringVar(), StringVar()],
+                      [StringVar(), StringVar(), StringVar()],
+                      [StringVar(), StringVar(), StringVar()]]
+
+        self.result_text = StringVar()
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Display reels
+        for i in range(3):
+            for j in range(3):
+                label = Label(self.root, textvariable=self.reels[i][j], width=8)
+                label.grid(row=i, column=j, padx=5, pady=5)
+
+        # Result label
+        result_label = Label(self.root, textvariable=self.result_text)
+        result_label.grid(row=3, column=0, columnspan=3, pady=10)
+
+        # Spin button
+        spin_button = Button(self.root, text="Spin", command=self.spin_reels)
+        spin_button.grid(row=4, column=1, pady=10)
+
+    def spin_reels(self):
+        # Spin reels and update labels
+        result = []
+        for i in range(3):
+            row_symbols = []
+            for j in range(3):
+                symbol = random.choice(self.symbols)
+                self.reels[i][j].set(symbol)
+                row_symbols.append(symbol)
+            result.append(" ".join(row_symbols))
+
+        # Check for winning combination
+        if self.check_winning():
+            messagebox.showinfo("Congratulations!", "You won!")
+        else:
+            messagebox.showinfo("Sorry", "You didn't win this time.")
+
+        # Update result label
+        self.result_text.set("Result: " + " | ".join(result))
+
+    def check_winning(self):
+        # Check for winning combinations
+        for i in range(3):
+            if all(self.reels[i][j].get() == self.reels[i][0].get() for j in range(1, 3)):
+                return True
+
+        for j in range(3):
+            if all(self.reels[i][j].get() == self.reels[0][j].get() for i in range(1, 3)):
+                return True
+
+        if all(self.reels[i][i].get() == self.reels[0][0].get() for i in range(1, 3)):
+            return True
+
+        if all(self.reels[i][2 - i].get() == self.reels[0][2].get() for i in range(1, 3)):
+            return True
+
+        return False
+
+
+
+
+
+
+
+
+
 master = Tk()
 master.title("Window Title")
-master.geometry("500x300")
+master.geometry("230x300")
 master.configure(background='seagreen')
 
 # BD parole eventual
 
 users = {
-    "user123": "pass123",
+    "123": "123",
     "user456": "pass456",
     "user789": "pass789"
 }
@@ -73,11 +158,16 @@ def open_signup_window():
 
 
 def open_main_window():
+    root = Tk()
+    slot_machine_gui = SlotMachineGame(root)
+    root.mainloop()
 
-    main_window = Tk()
-    main_window.title("Main Window")
-    main_window.geometry("500x300")
-    main_window.configure(background='seagreen')
+    
+
+    
+
+
+
 
 
 
@@ -120,23 +210,24 @@ def center_widget(widget):
 
 # button = Button(master, text='Login', width=25)
 
-username_label = Label(master, text="Username:")
+#username
+username_label = Label(master, text="Username:",background='seagreen')
 username_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
 username_entry = Entry(master)
-username_entry.grid(row=0, column=1, padx=10, pady=10)
+username_entry.grid(row=0, column=1, padx=5, pady=10)
 
-# Password Label and Entry
-password_label = Label(master, text="Password:")
+#parole
+password_label = Label(master, text="Password:",background='seagreen')
 password_label.grid(row=1, column=0, padx=10, pady=10, sticky=W)
 password_entry = Entry(master, show="*")
-password_entry.grid(row=1, column=1, padx=10, pady=10)
+password_entry.grid(row=1, column=1, padx=5, pady=10)
 
 # Login Button
 login_button = Button(master, text="Login", command=login)
-login_button.grid(row=2, column=0, pady=10)
+login_button.grid(row=2, column=0, pady=10, padx=10)
 
 # Signup Button
 signup_button = Button(master, text="Signup", command=open_signup_window)
-signup_button.grid(row=2, column=1, pady=10)
+signup_button.grid(row=2, column=1, pady=10, padx=10)
 
 mainloop()
