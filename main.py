@@ -11,73 +11,61 @@ import random
 
 
 
-class SlotMachineGame:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Slot Machine Game")
+class SlotMachineGUI:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Slot Machine Game")
 
-        self.symbols = ["Cherry", "Lemon", "Orange", "Plum", "Bell", "Bar", "Seven"]
+        self.symbols = ['Cherry', 'Orange', 'Plum', 'Bell', 'Bar', 'Seven']
+        self.balance = 100
 
-        self.reels = [[StringVar(), StringVar(), StringVar()],
-                      [StringVar(), StringVar(), StringVar()],
-                      [StringVar(), StringVar(), StringVar()]]
+        self.label = Label(master, text=f"Balance: {self.balance} credits", font=('Helvetica', 14))
+        self.label.pack(pady=10)
 
-        self.result_text = StringVar()
+        self.spin_button = Button(master, text="Spin", command=self.spin)
+        self.spin_button.pack(pady=20)
 
-        self.create_widgets()
+        self.bet_var = IntVar()
+        self.bet_entry = Entry(master, textvariable=self.bet_var, font=('Helvetica', 12))
+        self.bet_entry.pack(pady=10)
 
-    def create_widgets(self):
-        # Display reels
-        for i in range(3):
-            for j in range(3):
-                label = Label(self.root, textvariable=self.reels[i][j], width=8)
-                label.grid(row=i, column=j, padx=5, pady=5)
+        self.quit_button = Button(master, text="Quit", command=self.quit_game)
+        self.quit_button.pack(pady=10)
 
-        # Result label
-        result_label = Label(self.root, textvariable=self.result_text)
-        result_label.grid(row=3, column=0, columnspan=3, pady=10)
+    def spin_reel(self):
+        return random.choice(self.symbols)
 
-        # Spin button
-        spin_button = Button(self.root, text="Spin", command=self.spin_reels)
-        spin_button.grid(row=4, column=1, pady=10)
+    def spin(self):
+        try:
+            bet = int(self.bet_var.get())
+            if bet <= 0 or bet > self.balance:
+                messagebox.showwarning("Invalid Bet", "Please enter a valid bet.")
+                return
 
-    def spin_reels(self):
-        # Spin reels and update labels
-        result = []
-        for i in range(3):
-            row_symbols = []
-            for j in range(3):
-                symbol = random.choice(self.symbols)
-                self.reels[i][j].set(symbol)
-                row_symbols.append(symbol)
-            result.append(" ".join(row_symbols))
+            self.balance -= bet
 
-        # Check for winning combination
-        if self.check_winning():
-            messagebox.showinfo("Congratulations!", "You won!")
-        else:
-            messagebox.showinfo("Sorry", "You didn't win this time.")
+            reel1 = self.spin_reel()
+            reel2 = self.spin_reel()
+            reel3 = self.spin_reel()
 
-        # Update result label
-        self.result_text.set("Result: " + " | ".join(result))
+            result_text = f"Result: {reel1} {reel2} {reel3}"
+            messagebox.showinfo("Slot Machine Result", result_text)
 
-    def check_winning(self):
-        # Check for winning combinations
-        for i in range(3):
-            if all(self.reels[i][j].get() == self.reels[i][0].get() for j in range(1, 3)):
-                return True
+            if reel1 == reel2 == reel3:
+                winnings = bet * 3
+                self.balance += winnings
+                messagebox.showinfo("Congratulations!", f"You won {winnings} credits!")
 
-        for j in range(3):
-            if all(self.reels[i][j].get() == self.reels[0][j].get() for i in range(1, 3)):
-                return True
+            self.label.config(text=f"Balance: {self.balance} credits")
 
-        if all(self.reels[i][i].get() == self.reels[0][0].get() for i in range(1, 3)):
-            return True
+            if self.balance == 0:
+                messagebox.showinfo("Game Over", "You are out of credits. Thanks for playing!")
 
-        if all(self.reels[i][2 - i].get() == self.reels[0][2].get() for i in range(1, 3)):
-            return True
+        except ValueError:
+            messagebox.showwarning("Invalid Bet", "Please enter a valid bet (an integer).")
 
-        return False
+    def quit_game(self):
+        self.master.destroy()
 
 
 
@@ -95,7 +83,7 @@ master.configure(background='seagreen')
 # BD parole eventual
 
 users = {
-    "123": "123",
+    "1": "1",
     "user456": "pass456",
     "user789": "pass789"
 }
@@ -159,8 +147,10 @@ def open_signup_window():
 
 def open_main_window():
     root = Tk()
-    slot_machine_gui = SlotMachineGame(root)
+    slot_machine_gui = SlotMachineGUI(root)
     root.mainloop()
+
+
 
     
 
