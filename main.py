@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
 
+
 master = Tk()
 master.title("Window Title")
 master.geometry("250x130")
@@ -103,10 +104,12 @@ def open_signup_window():
     signup_button.grid(row=2, column=0, columnspan=2, pady=10)
 #######################################
     
-
+def destroy_and_reopen():
+    main_window.destroy()
+    
 #######################################
 def open_main_window():
-
+    global main_window
     main_window = Tk()
     main_window.title("Main Window")
     main_window.geometry("500x300")
@@ -122,7 +125,7 @@ def open_main_window():
     change_pass = Button(tab1, text="Change Passsword", command=open_newpass_window)
     change_pass.grid(row=2, column=0, pady=10, padx=20)
 
-    logout = Button(tab1, text = "Logout")
+    logout = Button(tab1, text = "Logout",command=destroy_and_reopen)
     logout.grid(row=3, column=0, pady=10, padx=20) #nefunctional nu reusesc sa redeschid master
 ##########################################
 
