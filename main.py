@@ -6,7 +6,7 @@ master = Tk()
 master.title("Window Title")
 master.geometry("250x130")
 master.configure(background='seagreen')
-#master.resizable(False,False)
+master.resizable(False,False)
 
 # BD parole eventual
 
@@ -16,10 +16,8 @@ users = {
     "user789": "pass789"
 }
 
-#functii
-
+###########################################
 def validate_login(username, password):
-    # Check if the entered username exists and the password matches
     if username in users and users[username] == password:
         return True
     else:
@@ -35,9 +33,10 @@ def login():
         master.destroy()
     else:
         messagebox.showerror("Login Failed", "Invalid username or password")
+######################################
 
 
-    ######################################
+######################################
 def newpass():
     username = username_entry.get()
     new_password = new_password_entry.get()
@@ -48,7 +47,6 @@ def newpass():
 
 def open_newpass_window():
     global newpass_window
-    #newpass_window = Toplevel(background='seagreen')
     newpass_window = Tk()
     newpass_window.configure(background='seagreen')
     newpass_window.title("Change Password")
@@ -69,11 +67,7 @@ def open_newpass_window():
 
     signup_button = Button(newpass_window, text="Change", command=newpass)
     signup_button.grid(row=2, column=0, columnspan=2, pady=10)
-
-
-
 #################################################
-
 
 
 #################################################    
@@ -87,8 +81,6 @@ def signup():
         signup_window.destroy()
     else:
         messagebox.showerror("Signup Failed", "Please enter both username and password")
-
-#ferestre
 
 def open_signup_window():
     global signup_window
@@ -109,7 +101,10 @@ def open_signup_window():
 
     signup_button = Button(signup_window, text="Signup", command=signup)
     signup_button.grid(row=2, column=0, columnspan=2, pady=10)
+#######################################
+    
 
+#######################################
 def open_main_window():
 
     main_window = Tk()
@@ -127,22 +122,17 @@ def open_main_window():
     change_pass = Button(tab1, text="Change Passsword", command=open_newpass_window)
     change_pass.grid(row=2, column=0, pady=10, padx=20)
 
-    logout = Button(tab1, text = "Logout",command = master.mainloop())
-    logout.grid(row=3, column=0, pady=10, padx=20)
-    
-    info = Label(tab2, text="Username: " + user_curent)####################
-    username_label = Label(tab2, text="Username:" + user_curent)##################
-    username_label.grid(row=1, column=1, padx=5, pady=10)############################
-
+    logout = Button(tab1, text = "Logout")
+    logout.grid(row=3, column=0, pady=10, padx=20) #nefunctional nu reusesc sa redeschid master
+##########################################
 
 #widgeturi master // puteam folosi place in loc de grid dar este mai mult de umblat la valori
+
 #username
-user_curent = ""#########################################
 username_label = Label(master, text="Username:",background='seagreen')
 username_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
 username_entry = Entry(master)
 username_entry.grid(row=0, column=1, padx=5, pady=10)
-user_curent = username_entry.get()################################################
 
 #parole
 password_label = Label(master, text="Password:",background='seagreen')
