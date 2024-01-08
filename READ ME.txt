@@ -1,0 +1,6 @@
+https://www.geeksforgeeks.org/python-grid-method-in-tkinter/
+https://www.geeksforgeeks.org/python-gui-tkinter/
+https://www.javatpoint.com/login-module-in-python //elmentele de login si signup
+
+https://chat.openai.com/share/2504aa9f-e94a-4af0-a9c0-caec6b716a0a //elmentele de login si signup
+https://stackoverflow.com/questions/57551497/how-to-save-entry-input-to-variable-in-tkinter-im-using-python-3
