@@ -1,7 +1,7 @@
 from tkinter import * 
 from tkinter.ttk import *
 from tkinter import messagebox
-
+import csv
 
 master = Tk()
 master.title("Window Title")
@@ -9,17 +9,29 @@ master.geometry("250x130")
 master.configure(background='seagreen')
 master.resizable(False,False)
 
-# BD parole eventual
+#################################
+def read_user_data():
+    try:
+        with open('user_data.csv', 'r') as file:
+            reader = csv.reader(file)
+            user_data = {rows[0]: rows[1] for rows in reader}
+    except FileNotFoundError:
+        user_data = {}
+    return user_data
 
-users = {
-    "1": "1",
-    "user456": "pass456",
-    "user789": "pass789"
-}
+def write_user_data(user_data):
+    with open('user_data.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        for username, password in user_data.items():
+            writer.writerow([username, password])
+
+#################################
+             
 
 ###########################################
 def validate_login(username, password):
-    if username in users and users[username] == password:
+    user_data = read_user_data()
+    if username in user_data and user_data[username] == password:
         return True
     else:
         return False
@@ -41,7 +53,9 @@ def login():
 def newpass():
     username = username_entry.get()
     new_password = new_password_entry.get()
-    users[username] = new_password
+    user_data = read_user_data()
+    user_data[username] = new_password
+    write_user_data(user_data)
     messagebox.showinfo("","Password changed successfully!")
     newpass_window.destroy()
 
@@ -77,7 +91,10 @@ def signup():
     new_password = new_password_entry.get()
 
     if new_username and new_password:
-        users[new_username] = new_password
+        user_data = read_user_data()
+        user_data[new_username] = new_password
+        write_user_data(user_data)
+        
         messagebox.showinfo("Signup Successful", "Account created for " + new_username)
         signup_window.destroy()
     else:
@@ -106,6 +123,7 @@ def open_signup_window():
     
 def destroy_and_reopen():
     main_window.destroy()
+    mainloop()
     
 #######################################
 def open_main_window():
@@ -125,8 +143,8 @@ def open_main_window():
     change_pass = Button(tab1, text="Change Passsword", command=open_newpass_window)
     change_pass.grid(row=2, column=0, pady=10, padx=20)
 
-    logout = Button(tab1, text = "Logout",command=destroy_and_reopen)
-    logout.grid(row=3, column=0, pady=10, padx=20) #nefunctional nu reusesc sa redeschid master
+    logout = Button(tab1, text = "Logout",command=destroy_and_reopen) 
+    logout.grid(row=3, column=0, pady=10, padx=20) 
 ##########################################
 
 #widgeturi master // puteam folosi place in loc de grid dar este mai mult de umblat la valori
